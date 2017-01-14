@@ -1,0 +1,66 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+###############################################################################
+###                                   System                                ###
+###############################################################################
+export HISTFILESIZE=
+export HISTSIZE=
+shopt -s histappend
+export PROMPT_COMMAND='history -a; history -c; history -r'
+export HISTCONTROL=ignoreboth
+export HISTTIMEFORMAT="%a%l:%M %p  "
+export HISTIGNORE='ls:bg:fg:history'
+###----------------------------------------------------------------------------
+### User specific aliases and functions
+###----------------------------------------------------------------------------
+export KERN_DIR="/usr/src/kernels/$(uname -r)"
+export EDITOR='/usr/bin/vim'
+alias vi="$EDITOR"
+###----------------------------------------------------------------------------
+### System Aliases
+###----------------------------------------------------------------------------
+alias ll='ls -l   --color=always'
+alias la='ls -lAh --color=always'
+alias ld='ls -ld  --color=always'
+alias lh='ls -lh  --color=always'
+alias lt='ls -l   --full-time --color=always'
+alias cp='cp -pv'
+###----------------------------------------------------------------------------
+### Find Stuff on the filesystem (fs). These are starter functions. To tailor
+### them to more-fit your workstyle type 'man find' (in the shell) and modify
+### them until you are happy.
+###----------------------------------------------------------------------------
+# Find files somewhere on the system; to use:
+#   1) call the alias, 'findsys'
+#   2) pass a directory where the search should begin, and
+#   3) pass a file name, either exact or fuzzy: e.g.:
+# $ findsys /var/ '*.log'
+function findSystemStuff()   {
+    findDir="$1"
+    findFSO="$2"
+    sudo find "$findDir" -name 'proc' -prune , -name 'dev' -prune , -name 'sys' -prune , -name 'run' -prune , -name "$findFSO"
+}
+
+alias findsys=findSystemStuff
+###----------------------------------------------------------------------------
+# Find fs objects (directories, files) in your home directory; To use:
+#   1) call the alias, 'findmy'
+#   2) pass a 'type' of fs object, either 'f' (file) or 'd' (directory)
+#   3) pass the object name, either exact or fuzzy: e.g.:
+# $ findmy f '.vimr*'
+function findMyStuff()   {
+    findType="$1"
+    findFSO="$2"
+    find "$HOME" -type "$findType" -name "$findFSO"
+}
+
+alias findmy=findMyStuff
+

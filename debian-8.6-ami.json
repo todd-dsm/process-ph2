@@ -1,0 +1,70 @@
+{
+  "variables":  {
+    "requestor": "{{env `USER`}}",
+    "system-name":  "base",
+    "ami_description": "GOLDEN_IMAGE",
+    "ssh_username": "admin"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "source_ami": "ami-8f7bd9ef",
+      "subnet_id":  "subnet-1c0c1f5a",
+      "vpc_id": "default-vpc",
+      "security_group_ids": "sg-11890274",
+      "ami_description": "{{user `ami_description`}}",
+      "ssh_pty": true,
+      "ami_name": "{{user `system-name`}}",
+      "ssh_username": "{{user `ssh_username`}}",
+      "region": "us-west-2",
+      "instance_type": "t2.micro",
+      "force_deregister": true,
+      "tags": {
+        "env":      "dev",
+        "type":     "os",
+        "os":       "debian",
+        "Platform": "Debian",
+        "vers":     "8.6",
+        "cname":    "jessie",
+        "rel":      "ga",
+        "tech":     "{{user `requestor`}}",
+        "Name":     "{{user `system-name`}}"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "sources/builder",
+      "destination": "/home/admin/.ssh/id_rsa"
+    },
+    {
+      "type": "file",
+      "source": "sources/builder.pub",
+      "destination": "/home/admin/.ssh/id_rsa.pub"
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "HOME_DIR=/home/admin",
+        "backupDir=/home/admin/backup"
+      ],
+      "execute_command": "echo 'admin' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "scripts/common/shell-test.sh",
+        "scripts/common/autoprep.sh",
+        "scripts/debian/update.sh",
+        "scripts/debian/inst-docker.sh",
+        "scripts/debian/inst-sysdig.sh",
+        "scripts/common/sshd.sh",
+        "scripts/debian/networking.sh",
+        "scripts/debian/sudoers.sh",
+        "scripts/common/admin-user.sh",
+        "scripts/common/config-root.sh",
+        "scripts/debian/systemd.sh",
+        "scripts/debian/cleanup.sh",
+        "scripts/common/minimize.sh"
+      ]
+    }
+  ]
+}
