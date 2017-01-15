@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # -----------------------------------------------------------------------------
-# PURPOSE: Set your DEFAULT Security Group to allow access from your Local
-#          internet Gateway. Only for new/first-time setups.
+# PURPOSE: In a NEW VPC, sets your DEFAULT Security Group to allow access
+#          from your local internet Gateway. Only for new/first-time setups.
 # -----------------------------------------------------------------------------
 #    EXEC: ./access-sg.sh
 # -----------------------------------------------------------------------------
@@ -15,9 +15,7 @@
 # -----------------------------------------------------------------------------
 #    DATE: 2017/01/15
 # -----------------------------------------------------------------------------
-set -x
-#SecurityGroups[0].IpPermissions[1].IpRanges[0].CidrIp # Taylor
-#SecurityGroups[0].IpPermissions[0].IpRanges[0].CidrIp # Me
+#set -x
 
 ###----------------------------------------------------------------------------
 ### VARIABLES
@@ -28,8 +26,7 @@ declare currentIPAddress="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 if [[ -z "$currentIPAddress" ]]; then
     printf '%s\n' "OMG! You have NO IP ADDRESS!!!"
 else
-    echo    "myIPAddress=$currentIPAddress/32"
-    declare myIPAddress="$currentIPAddress/32"
+    declare myCIDRAddress="$currentIPAddress/32"
 fi
 
 # Get an SG Ingress IP if there is one
@@ -51,13 +48,18 @@ defSGID="$(aws ec2 describe-security-groups                             \
 ###
 ###---
 if [[ "$locGWStatus" = 'None' ]]; then
+    printf '%s\n' """
+    Authorizing your local gateway to:
+        Access this AWS/VPC Security Group: $defSGID
+        From this CIDR address:             $myCIDRAddress
+    """
     aws ec2 authorize-security-group-ingress    \
-        --group-id "$defSGID" --protocol tcp   \
-        --port 22 --cidr "$myIPAddress"
+        --group-id "$defSGID" --protocol tcp    \
+        --port 22 --cidr "$myCIDRAddress"
 else
     printf '%s\n' """
     These values are already set:
         This is your default Security Group: $defSGID
-        This IP has access to your VPC:      $locGWStatus
+        This CIDR address accesses your VPC: $myCIDRAddress
     """
 fi
