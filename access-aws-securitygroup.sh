@@ -21,11 +21,12 @@
 ### VARIABLES
 ###----------------------------------------------------------------------------
 # Get Local Gateway Address
-printf '%s\n' "Getting your local network Gateway IP address..."
+printf '\n%s\n' "Getting your local network Gateway IP address..."
 declare currentIPAddress="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 if [[ -z "$currentIPAddress" ]]; then
     printf '%s\n' "OMG! You have NO IP ADDRESS!!!"
 else
+    printf '%s\n\n' "  Your current gateway address is: $currentIPAddress"
     declare myCIDRAddress="$currentIPAddress/32"
 fi
 
