@@ -3,9 +3,7 @@
     "requestor": "{{env `AWS_PROFILE`}}",
     "system-name":  "base",
     "ami_description": "GOLDEN_IMAGE",
-    "ssh_username": "admin",
-    "myAWSRegion": "{{env `awsRegion`}}",
-    "latestImageId": "{{env `reqdImageId`}}"
+    "ssh_username": "admin"
   },
   "builders": [
     {

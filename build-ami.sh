@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2086,SC1091
 # QnD scipt to build new Amazon Machine Image.
-#set -x
+set -x
 
 ###----------------------------------------------------------------------------
 ### Variables
@@ -21,7 +21,7 @@ declare packerFile="$1"
 #declare osxISO='OSX_InstallESD_11.12_16A323.dmg'
 #declare isoURL="$isoDir/$osxISO"
 declare defsValBld="-var latestImageId=$reqdImageId \
-    -var awsRegion=$AWS_REGION \
+    -var myAWSRegion=$AWS_REGION \
     $packerFile"
 
 # Packer may grow to include more testing in the future; form the arrays:
