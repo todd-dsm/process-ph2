@@ -3,12 +3,14 @@
     "requestor": "{{env `AWS_PROFILE`}}",
     "system-name":  "base",
     "ami_description": "GOLDEN_IMAGE",
-    "ssh_username": "admin"
+    "ssh_username": "admin",
+    "myAWSRegion": "{{env `awsRegion`}}",
+    "latestImageId": "{{env `reqdImageId`}}"
   },
   "builders": [
     {
       "type": "amazon-ebs",
-      "source_ami": "ami-8f7bd9ef",
+      "source_ami": "{{user `latestImageId`}}",
       "subnet_id":  "subnet-1c0c1f5a",
       "vpc_id": "default-vpc",
       "security_group_ids": "sg-11890274",
@@ -16,7 +18,7 @@
       "ssh_pty": true,
       "ami_name": "{{user `system-name`}}",
       "ssh_username": "{{user `ssh_username`}}",
-      "region": "us-west-2",
+      "region": "{{user `myAWSRegion`}}",
       "instance_type": "t2.micro",
       "force_deregister": true,
       "tags": {

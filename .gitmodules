@@ -1,0 +1,3 @@
+[submodule "scripts/aws-tools"]
+	path = scripts/aws-tools
+	url = git@github.com:todd-dsm/aws-tools.git

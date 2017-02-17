@@ -1,0 +1,37 @@
+# shellcheck disable=SC2148,SC1090,SC1091,SC2012,SC2139
+############################################################################### 
+###                                Amazon AWS                               ### 
+############################################################################### 
+export AWS_REGION='us-west-2'                                                      
+
+###############################################################################
+###                                VirtualBox                               ###
+###############################################################################
+export VBOX_USER_HOME="$HOME/vms/vbox"
+
+###############################################################################
+###                                Terraform                                ###
+###############################################################################
+alias tf='/usr/local/bin/terraform'
+export TF_VAR_AWS_PROFILE="$AWS_PROFILE"
+export TF_LOG='DEBUG'
+export TF_LOG_PATH='/tmp/terraform.log'
+
+###############################################################################
+###                                  Packer                                 ###
+###############################################################################
+export PACKER_HOME="$HOME/vms/packer"
+export PACKER_CACHE_DIR="$PACKER_HOME/iso-cache"
+export PACKER_BUILD_DIR="$PACKER_HOME/builds"
+export PACKER_LOG='yes'
+export PACKER_LOG_PATH='/tmp/packer.log'
+#export PACKER_NO_COLOR='yes'
+
+###############################################################################
+###                                 Vagrant                                 ###
+###############################################################################
+#export VAGRANT_LOG=debug
+export VAGRANT_HOME="$HOME/vms/vagrant"
+export VAGRANT_BOXES="$VAGRANT_HOME/boxes"
+export VAGRANT_DEFAULT_PROVIDER='virtualbox'
+
