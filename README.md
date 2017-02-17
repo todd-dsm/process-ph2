@@ -29,18 +29,22 @@ Now that the requisite access is in place the AMI can be built.
 ## Build the AMI
 Building an AMI means describing it in a JSON file that Packer can consume. In this case that file is `debian-8.6-ami.json`. It needs to be built from an existing AMI so, we'll use the one [Debian] offers in the AWS Marketplace. Since finding the latest AMI `ImageId` requires the manual steps of selecting the **Manual Launch** (tab) and indexing the  `ImageId` in your region the exorcise becomes tedious. We'll get the automation to do it for us.
 
+### Process Description
+The `build-ami.sh` script takes 1 argument - the packer file: `debian-8.6-ami.json`
+
+Next, `build-ami.sh` calls `scripts/aws-tools/find-latest-amis.sh` to [find the latest] Debian Jessie AMI `ImageId` which is then sent to Packer as a variable; for example: `latestImageId=ami-12345678`. _NOTE: this script does factor for `AWS_REGION` specified in_ `vars-build`.
+
 **WARNING: this step can take 8-12 minutes.**
+
+After the script has been started it's time to go make a sandwich, do some laundry, whatever. It takes some time to build, which varies based on available Internet connection bandwidth and workstation horsepower. 
 
 To build an AMI simply run this script:
 
 `./build-ami.sh debian-8.6-ami.json 2>&1 | tee /tmp/packer-debian-build.out`
 
-### Process Description
-The `build-ami.sh` script takes 1 argument - the packer file: `debian-8.6-ami.json`
 
-After that, `build-ami.sh` calls `scripts/aws-tools/find-latest-amis.sh` to [find the latest] Debian Jessie AMI `ImageId` which is then sent to Packer as a variable; for example: `latestImageId=ami-12345678`. _NOTE: this script does factor for the region specified in_ `vars-build`.
-
-After that, go make a sandwich. It takes a bit to build. When you're ready, review the output in `/tmp/packer-debian-build.out`. These are the build details.
+### Post-Build
+When you're ready, review the output in `/tmp/packer-debian-build.out`. These are the build details.
 
 Now that you have a tailored AMI. You are ready to [start Terraforming].
 
