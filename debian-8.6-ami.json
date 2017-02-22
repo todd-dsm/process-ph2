@@ -8,7 +8,16 @@
   "builders": [
     {
       "type": "amazon-ebs",
-      "source_ami": "{{user `latestImageId`}}",
+      "source_ami_filter": {
+        "filters": {
+          "name": "debian-jessie-amd64*",
+          "architecture": "x86_64",
+          "virtualization-type": "hvm",
+          "root-device-type": "ebs"
+        },
+        "owners": ["379101102735"],
+        "most_recent": true
+      },
       "subnet_id":  "subnet-1c0c1f5a",
       "vpc_id": "default-vpc",
       "security_group_ids": "sg-11890274",
