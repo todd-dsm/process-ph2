@@ -55,6 +55,7 @@
     {
       "type": "shell",
       "environment_vars": [
+        "export DEBIAN_FRONTEND=noninteractive",
         "HOME_DIR=/home/admin",
         "backupDir=/home/admin/backup"
       ],
