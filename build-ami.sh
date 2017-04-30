@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2086,SC1091
 # QnD scipt to build new Amazon Machine Image.
+# EXEC: ./build-ami.sh debian-8.6-ami.json
 set -x
 
 ###----------------------------------------------------------------------------
@@ -13,9 +14,9 @@ source vars-build
 #declare reqdImageId="$(eval scripts/aws-tools/find-latest-amis.sh \
 #    -r "$AWS_REGION" -n jessie -d debian | tail -1)"
 ###----------------------------------------------------------------------------
-declare statusCount='0'
 #export  PACKER_NO_COLOR='false'
 declare packerFile="$1"
+declare statusCount='0'
 declare defsValBld="-var myAWSRegion=$AWS_REGION $packerFile"
 
 # Packer may grow to include more testing in the future; form the arrays:
@@ -56,13 +57,18 @@ declare currentAMI="$(eval scripts/aws-tools/find-latest-amis.sh \
     -n base -d self | tail -1)"
 
 # Announce the plan:
-printf '\n%s\n' """
-    The current image $currentAMI is going to be replaced.
-    These are the details:
+if [[ -z "$currentAMI" ]]; then
+    printf '\n%s\n' """
+        There is no current AMI fitting this description. Building new...
     """
-
-# Display AMI details
-aws ec2 describe-images --image-ids "$currentAMI"
+else
+    printf '\n%s\n' """
+        The current image $currentAMI is going to be replaced.
+        These are the details:
+    """
+    # Display AMI details
+    aws ec2 describe-images --image-ids "$currentAMI"
+fi
 
 
 ###---

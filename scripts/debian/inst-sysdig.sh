@@ -2,7 +2,7 @@
 # PURPOSE: Install sysdig on the system.
 #     URL: http://www.sysdig.org/install/
 #   GUIDE: http://www.sysdig.org/wiki/sysdig-user-guide/
-set -eux
+set -ux
 
 ###----------------------------------------------------------------------------
 ### VARIABLES
